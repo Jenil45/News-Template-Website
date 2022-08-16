@@ -1,4 +1,14 @@
-<?php include "header.php"; ?>
+<?php include "header.php";
+
+    // session_start();
+    // if(isset($_SESSION['username']))
+    // {
+    //     echo '<div class="alert alert-success" role="alert">
+    //             You are loggedin
+    //           </div>';
+    // }
+
+?>
   <div id="admin-content">
       <div class="container">
           <div class="row">
