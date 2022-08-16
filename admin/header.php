@@ -1,3 +1,13 @@
+<?php
+
+    session_start();
+
+    if(!isset($_SESSION['username']))
+    {
+        header("Location: http://localhost/news-template/admin");
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -26,7 +36,7 @@
                     </div>
                     <!-- /LOGO -->
                       <!-- LOGO-Out -->
-                    <div class="col-md-offset-9  col-md-1">
+                    <div class="col-md-offset-9  row-md-1">
                         <a href="logout.php" class="admin-logout" >logout</a>
                     </div>
                     <!-- /LOGO-Out -->
@@ -43,12 +53,22 @@
                             <li>
                                 <a href="post.php">Post</a>
                             </li>
+
+                            <?php
+
+                                if($_SESSION['role'] == 1)
+                                {
+
+                            ?>
                             <li>
                                 <a href="category.php">Category</a>
                             </li>
                             <li>
                                 <a href="users.php">Users</a>
                             </li>
+                            <?php
+                                }
+                            ?>
                         </ul>
                     </div>
                 </div>
