@@ -1,5 +1,8 @@
 <?php include "header.php"; 
-
+    if($_SESSION['role'] == 0)
+    {
+        header("Location: http://localhost/news-template/admin/post.php");
+    }
     if(isset($_POST['save']))
     {
         include "connect.php";
