@@ -1,14 +1,5 @@
-<?php include "header.php";
-
-    // session_start();
-    // if(isset($_SESSION['username']))
-    // {
-    //     echo '<div class="alert alert-success" role="alert">
-    //             You are loggedin
-    //           </div>';
-    // }
-
-?>
+<?php include "header.php"; 
+?> 
   <div id="admin-content">
       <div class="container">
           <div class="row">
@@ -19,96 +10,122 @@
                   <a class="add-new" href="add-post.php">add post</a>
               </div>
               <div class="col-md-12">
-                  <table class="content-table">
-                      <thead>
-                          <th>S.No.</th>
-                          <th>Title</th>
-                          <th>Category</th>
-                          <th>Date</th>
-                          <th>Author</th>
-                          <th>Edit</th>
-                          <th>Delete</th>
-                      </thead>
-                      <tbody>
-                          <tr>
-                              <td class='id'>1</td>
-                              <td>Lorem ipsum dolor sit amet</td>
-                              <td>Html</td>
-                              <td>01 Nov, 2019</td>
-                              <td>Admin</td>
-                              <td class='edit'><a href='update-post.php'><i class='fa fa-edit'></i></a></td>
-                              <td class='delete'><a href='delete-post.php'><i class='fa fa-trash-o'></i></a></td>
-                          </tr>
-                          <tr>
-                              <td class='id'>2</td>
-                              <td>Lorem ipsum dolor sit amet</td>
-                              <td>Html</td>
-                              <td>01 Nov, 2019</td>
-                              <td>Admin</td>
-                              <td class='edit'><a href='update-post.php'><i class='fa fa-edit'></i></a></td>
-                              <td class='delete'><a href='delete-post.php'><i class='fa fa-trash-o'></i></a></td>
-                          </tr>
-                          <tr>
-                              <td class='id'>3</td>
-                              <td>Lorem ipsum dolor sit amet</td>
-                              <td>Html</td>
-                              <td>01 Nov, 2019</td>
-                              <td>Admin</td>
-                              <td class='edit'><a href='update-post.php'><i class='fa fa-edit'></i></a></td>
-                              <td class='delete'><a href='delete-post.php'><i class='fa fa-trash-o'></i></a></td>
-                          </tr>
-                          <tr>
-                              <td class='id'>4</td>
-                              <td>Lorem ipsum dolor sit amet</td>
-                              <td>Html</td>
-                              <td>01 Nov, 2019</td>
-                              <td>Admin</td>
-                              <td class='edit'><a href='update-post.php'><i class='fa fa-edit'></i></a></td>
-                              <td class='delete'><a href='delete-post.php'><i class='fa fa-trash-o'></i></a></td>
-                          </tr>
-                          <tr>
-                              <td class='id'>5</td>
-                              <td>Lorem ipsum dolor sit amet</td>
-                              <td>Html</td>
-                              <td>01 Nov, 2019</td>
-                              <td>Admin</td>
-                              <td class='edit'><a href='update-post.php'><i class='fa fa-edit'></i></a></td>
-                              <td class='delete'><a href='delete-post.php'><i class='fa fa-trash-o'></i></a></td>
-                          </tr>
-                          <tr>
-                              <td class='id'>6</td>
-                              <td>Lorem ipsum dolor sit amet</td>
-                              <td>Html</td>
-                              <td>01 Nov, 2019</td>
-                              <td>Admin</td>
-                              <td class='edit'><a href='update-post.php'><i class='fa fa-edit'></i></a></td>
-                              <td class='delete'><a href='delete-post.php'><i class='fa fa-trash-o'></i></a></td>
-                          </tr>
-                          <tr>
-                              <td class='id'>7</td>
-                              <td>Lorem ipsum dolor sit amet</td>
-                              <td>Html</td>
-                              <td>01 Nov, 2019</td>
-                              <td>Admin</td>
-                              <td class='edit'><a href='update-post.php'><i class='fa fa-edit'></i></a></td>
-                              <td class='delete'><a href='delete-post.php'><i class='fa fa-trash-o'></i></a></td>
-                          </tr>
-                          <tr>
-                              <td class='id'>8</td>
-                              <td>Lorem ipsum dolor sit amet</td>
-                              <td>Html</td>
-                              <td>01 Nov, 2019</td>
-                              <td>Admin</td>
-                              <td class='edit'><a href='update-post.php'><i class='fa fa-edit'></i></a></td>
-                              <td class='delete'><a href='delete-post.php'><i class='fa fa-trash-o'></i></a></td>
-                          </tr>
-                      </tbody>
-                  </table>
-                  <ul class='pagination admin-pagination'>
-                      <li class="active"><a>1</a></li>
-                      <li><a>2</a></li>
-                      <li><a>3</a></li>
-                  </ul>
+
+                            <?php
+                                include "connect.php";
+
+                                $limit = 3;
+            
+                                if(isset($_GET['page']))
+                                {
+                                    $page = $_GET['page'];
+                                }
+            
+                                else
+                                {
+                                    $page = 1;
+                                }
+            
+                                $offset = ($page-1)*$limit;
+
+                                if($_SESSION['role'] == 1)
+                                {
+                                    $sql = "SELECT * FROM post  
+                                    LEFT JOIN category ON post.category=category.category_id 
+                                    LEFT JOIN user ON post.author=user.user_id 
+                                    ORDER BY post.post_id DESC LIMIT $offset , $limit";
+                                    $result = mysqli_query($connection ,$sql) or die("Query failed");
+                                }
+
+                                elseif($_SESSION['role'] == 0)
+                                {
+                                    $sql = "SELECT * FROM post  
+                                    LEFT JOIN category ON post.category=category.category_id 
+                                    LEFT JOIN user ON post.author=user.user_id
+                                    WHERE post.author={$_SESSION['user_id']} 
+                                    ORDER BY post.post_id DESC LIMIT $offset , $limit";
+                                    $result = mysqli_query($connection ,$sql) or die("Query failed");
+                                }
+
+                                if(mysqli_num_rows($result) > 0)
+                                {
+            
+                                    echo '<table class="content-table">
+                                    <thead>
+                                        <th>S.No.</th>
+                                        <th>Title</th>
+                                        <th>Category</th>
+                                        <th>Date</th>
+                                        <th>Author</th>
+                                        <th>Edit</th>
+                                        <th>Delete</th>
+                                    </thead>
+                                    <tbody>';
+                                        while($row = mysqli_fetch_assoc($result))
+                                        {
+                                            if($row['role'] == 0)
+                                            {
+                                                $author = "Normal User";
+                                            }
+                                            else
+                                            {
+                                                $author = "ADMIN";
+                                            }
+                                            echo "<tr>
+                                            <td class='id'>".$row['post_id']."</td>
+                                            <td>".$row['title']."</td>
+                                            <td>".$row['category_name']."</td>
+                                            <td>".$row['post_date']."</td>
+                                            <td>".$author."</td>
+                                            <td class='edit'><a href='update-post.php?id=".$row['post_id']."'><i class='fa fa-edit'></i></a></td>
+                                            <td class='delete'><a href='delete-post.php?id=".$row['post_id']."&catid=".$row['category']."'><i class='fa fa-trash-o'></i></a></td>
+                                            </tr>";
+                                        }    
+                                            
+                                        echo '</tbody>
+                                    </table>';
+                                }
+                            ?>
+
+                    <?php
+                    $sql1 = "SELECT * FROM post";
+                    $result1 = mysqli_query($connection , $sql1) or die("Query failed");
+                    
+                    if(mysqli_num_rows($result1) > 0)
+                    {
+                        $total_record = mysqli_num_rows($result1);
+                        $limit = 3;
+                        $total_page = ceil($total_record/$limit);
+                        
+                        echo "<ul class='pagination admin-pagination'>";
+                        
+                        if($page > 1)
+                        {
+                            echo "<li><a href='post.php?page=".($page-1)."'>Previous</a></li>";
+                        }
+                        for($i = 1 ; $i <= $total_page ; $i++)
+                        {
+                            if($i == $page)
+                            {
+                                $active = "active";
+                            }
+
+                            else
+                            {
+                                $active = "";
+                            }
+                            
+                            echo "<li class=".$active."><a href='post.php?page=".$i."'>".$i."</a></li>";
+                        }
+                        if($page < $total_page)
+                        {
+                            echo "<li><a href='post.php?page=".($page+1)."'>Next</a></li>";
+                        }
+                    echo "</ul>";
+                    }
+                ?>
+                          
+
               </div>
           </div>
       </div>
