@@ -1,14 +1,14 @@
 <?php
     include "connect.php";
 
-    if(isset($_FILES['fileupload']))
+    if(isset($_FILES['fileToUpload']))
     {
         $errors = array();
 
-        $file_name = $_FILES['fileupload']['name'];
-        $file_size = $_FILES['fileupload']['size'];
-        $file_tmp = $_FILES['fileupload']['tmp_name'];
-        $file_type = $_FILES['fileupload']['type'];
+        $file_name = $_FILES['fileToUpload']['name'];
+        $file_size = $_FILES['fileToUpload']['size'];
+        $file_tmp = $_FILES['fileToUpload']['tmp_name'];
+        $file_type = $_FILES['fileToUpload']['type'];
         $file_ext = strtolower(end(explode('.' , $file_name)));
         $extension = array('jpeg' , 'jpg' , 'png');
 
