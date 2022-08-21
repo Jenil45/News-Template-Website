@@ -63,6 +63,7 @@
                                     <tbody>';
                                         while($row = mysqli_fetch_assoc($result))
                                         {
+                                            $sno = $offset+1;
                                             if($row['role'] == 0)
                                             {
                                                 $author = "Normal User";
@@ -72,7 +73,7 @@
                                                 $author = "ADMIN";
                                             }
                                             echo "<tr>
-                                            <td class='id'>".$row['post_id']."</td>
+                                            <td class='id'>".$sno."</td>
                                             <td>".$row['title']."</td>
                                             <td>".$row['category_name']."</td>
                                             <td>".$row['post_date']."</td>
@@ -80,6 +81,8 @@
                                             <td class='edit'><a href='update-post.php?id=".$row['post_id']."'><i class='fa fa-edit'></i></a></td>
                                             <td class='delete'><a href='delete-post.php?id=".$row['post_id']."&catid=".$row['category']."'><i class='fa fa-trash-o'></i></a></td>
                                             </tr>";
+
+                                            $offset++;
                                         }    
                                             
                                         echo '</tbody>
