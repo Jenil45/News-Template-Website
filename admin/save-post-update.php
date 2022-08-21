@@ -27,9 +27,12 @@
             $errors[] = "File siz emust be lower than 2MB";
         }
 
+        $new_name = time()."-".basename($file_name);
+        $target="upload/".$new_name;
+        $img_name = $new_name;
         if(empty($errors) == true)
         {
-            move_uploaded_file($file_tmp , "upload/".$file_name);
+            move_uploaded_file($file_tmp , $target);
         }
 
         else
@@ -39,10 +42,16 @@
         }
     }
 
-    $sql = "UPDATE post SET title='{$_POST["post_title"]}' , description='{$_POST["postdesc"]}' , category={$_POST["category"]} , post_img='$file_name'
-    WHERE post_id={$_POST["post_id"]}";
+    $sql = "UPDATE post SET title='{$_POST["post_title"]}' , description='{$_POST["postdesc"]}' , category={$_POST["category"]} , post_img='$img_name'
+    WHERE post_id={$_POST["post_id"]};";
 
-    $result = mysqli_query($connection , $sql);
+    if($_POST['old_category'] != $_POST['category'])
+    {
+        $sql .= "UPDATE category SET post=post-1 WHERE category_id={$_POST['old_category']};";
+        $sql .= "UPDATE category SET post=post+1 WHERE category_id={$_POST['category']};";
+    }
+
+    $result = mysqli_multi_query($connection , $sql);
 
     if($result)
     {
