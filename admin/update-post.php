@@ -1,4 +1,20 @@
-<?php include "header.php"; ?>
+<?php include "header.php";
+    if($_SESSION['role'] == 0)
+    {
+        include 'connect.php';
+        $post_id = $_GET['id'];
+        $sql2= "SELECT * FROM post WHERE post_id={$post_id}";
+
+        $result2 = mysqli_query($connection , $sql2);
+        $row2 = mysqli_fetch_assoc($result2);
+
+        if($row2['author'] != $_SESSION['user_id'])
+        {
+            header("Location: http://localhost/news-template/admin/post.php");
+        }
+    }
+
+?>
 <div id="admin-content">
     <div class="container">
         <div class="row">
@@ -59,6 +75,7 @@
                             }
 
                         echo '</select>
+                        <input type="hidden" name="old_category" value="'.$row['category'].'">
                     </div>
                     <div class="form-group">
                         <label for="">Post image</label>
