@@ -9,7 +9,7 @@
 ?>
 
 <?php
-        if(isset($_POST['login']))
+        if(isset($_POST['login']))       
         {
             include "connect.php";
             $username = mysqli_real_escape_string($connection , $_POST['username']);
